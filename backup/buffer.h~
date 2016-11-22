@@ -1,0 +1,20 @@
+/* buffer.h */
+
+struct buffer
+{
+	char *head;
+	int head_length;
+	int head_size;
+
+	char *tail;
+	int tail_length;
+	int tail_size;
+};
+
+buffer* buffer_alloc();
+void buffer_free(buffer *b);
+
+void buffer_insert(buffer *b, int id, char c);
+void buffer_delete(buffer *b, int id);
+
+void buffer_move(int id);

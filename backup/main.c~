@@ -1,0 +1,11 @@
+/* main.c */
+
+#include <stdio.h>
+
+#include "ui.h"
+#include "buffer.h"
+
+int main()
+{
+    
+}

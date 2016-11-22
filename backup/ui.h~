@@ -1,0 +1,12 @@
+/* ui.h */
+
+#ifndef UI_H
+#define UI_H
+
+int ui_init();
+
+void ui_update();
+
+void ui_free();
+
+#endif
