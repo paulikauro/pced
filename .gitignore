@@ -1,2 +1,3 @@
 *.o
 pe
+stderr.log
