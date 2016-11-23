@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "buffer.h"
 
@@ -81,7 +82,7 @@ void gap_move(buffer *b, int index)
 {
     if (b->gap_start == index) return;
     if (index >= b->size) return;
-
+    
     int gap_size = b->gap_end - b->gap_start;
     
     if (index < b->gap_start) {
@@ -90,7 +91,7 @@ void gap_move(buffer *b, int index)
 	b->gap_start = index;
 	b->gap_end = index + gap_size;
     } else {
-	int mvsize = index - b->gap_end;
+	int mvsize = index - b->gap_start;
 	memmove(b->ptr + b->gap_start, b->ptr + b->gap_end, mvsize);
 	b->gap_start = index;
 	b->gap_end = index + gap_size;

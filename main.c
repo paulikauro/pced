@@ -7,6 +7,10 @@
 
 int main()
 {
+    fclose(stderr);
+    stderr = fopen("stderr.log", "w+");
+    fprintf(stderr, "\nStarting pced\n");
+    
     buffer *buf = buffer_alloc();
     ui_init(buf);
 
