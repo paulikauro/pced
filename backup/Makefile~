@@ -1,9 +1,0 @@
-CFLAGS=-Wall -Wextra -Werror
-all: $(OBJS)
-	gcc -o pe $^
-
-%.o: %.c
-	gcc $(CFLAGS) -c $< -o $@
-
-clean:
-	rm -f $(OBJS) pe
