@@ -26,6 +26,7 @@ void ui_init(buffer *buf, char * filename)
     noecho();
 
     getmaxyx(stdscr, rows, cols);
+	ui_refresh();
 }
 
 int ui_update()
