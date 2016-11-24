@@ -5,14 +5,21 @@
 #include "ui.h"
 #include "buffer.h"
 
-int main()
+int main(int argc, char *argv[])
 {
+    if (argc != 2) {
+	printf("Usage: pced <filename>\n");
+	return 1;
+    }
+    char * filename = argv[1];
+    
     fclose(stderr);
     stderr = fopen("stderr.log", "w+");
     fprintf(stderr, "\nStarting pced\n");
     
     buffer *buf = buffer_alloc();
-    ui_init(buf);
+    buffer_loadfile(buf, filename);
+    ui_init(buf, filename);
 
     int state = 1;
     while (state) {

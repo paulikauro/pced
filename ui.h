@@ -5,7 +5,7 @@
 
 #include "buffer.h"
 
-void ui_init(buffer *b);
+void ui_init(buffer *b, char *filename);
 
 int ui_update();
 

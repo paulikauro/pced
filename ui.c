@@ -10,11 +10,13 @@ void ui_refresh();
 buffer *b;
 int rows, cols;
 int curid;
+char * fn;
 
-void ui_init(buffer *buf)
+void ui_init(buffer *buf, char * filename)
 {
     b = buf;
     curid = 0;
+    fn = filename;
     
     initscr();
     raw();
@@ -48,6 +50,9 @@ int ui_input()
     case 27:
 	s = 0;
 	break;
+    case KEY_F(1):
+	buffer_savefile(b, fn);
+	break;
     case KEY_RIGHT:
 	curid++;
 	if (buffer_getch(b, curid - 1)  == '\0') curid--;
@@ -76,7 +81,7 @@ int ui_input()
 void ui_refresh()
 {
     /* update the screen */
-    int i = 0;
+  int i = 0;
     int cy = 0, cx = 1;
     int ccx = cx, ccy = cy;
 
@@ -98,7 +103,7 @@ void ui_refresh()
 	    break;
 	}
 
-	if (cx > cols) {
+	if (cx == cols) {
 	    cy++;
 	    cx = 1;
 	    mvaddch(cy, 0, '\\');
@@ -116,7 +121,7 @@ void ui_refresh()
     /* status bar */
     clrtobot();
     attron(A_STANDOUT);
-    mvprintw(rows - 1, 0, "gap_start: %d gap_end: %d x: %d y: %d curid: %d", b->gap_start, b->gap_end, ccx, ccy, curid);
+    mvprintw(rows - 1, 0, "ESC=exit (no save) F1=save");
     clrtoeol();
     attroff(A_STANDOUT);
 

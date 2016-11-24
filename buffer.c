@@ -42,6 +42,38 @@ void buffer_free(buffer *b)
     free(b);
 }
 
+int buffer_loadfile(buffer *b, char *filename)
+{
+    FILE *fp = fopen(filename, "r");
+    if (fp == NULL) return -1; /* could not open file */
+
+    int i = 0, c;
+    while ((c = fgetc(fp)) != EOF) {
+	buffer_insertch(b, (char)c, i);
+	i++;
+    }
+    
+    fclose(fp);
+    return 0;
+}
+
+int buffer_savefile(buffer *b, char *filename)
+{
+    FILE *fp = fopen(filename, "w");
+    if (fp == NULL) return -1; /* something went wrong */
+
+    int i;
+    for (i = 0; i < b->gap_start; i++) {
+	fputc(b->ptr[i], fp);
+    }
+    for (i = b->gap_end; i < b->size - 1; i++) {
+	fputc(b->ptr[i], fp);
+    }
+    
+    fclose(fp);
+    return 0;
+}
+
 void buffer_insertch(buffer *b, char c, int id)
 {
     /* prepare the gap */
