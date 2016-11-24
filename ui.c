@@ -11,12 +11,14 @@ buffer *b;
 int rows, cols;
 int curid;
 char * fn;
+int ss_id;
 
 void ui_init(buffer *buf, char * filename)
 {
     b = buf;
     curid = 0;
     fn = filename;
+    ss_id = 0;
     
     initscr();
     raw();
@@ -61,6 +63,12 @@ int ui_input()
 	if (curid == 0) break;
 	curid--;
 	break;
+    case KEY_DOWN:
+	if (buffer_getch(b, curid + cols - 1) != '\0') curid += cols;
+	break;
+    case KEY_UP:
+	if (curid - cols >= 0) curid -= cols;
+	break;
     case KEY_BACKSPACE:
 	if (curid == 0) break;
 	buffer_delete(b, curid, 1);
@@ -81,10 +89,10 @@ int ui_input()
 void ui_refresh()
 {
     /* update the screen */
-  int i = 0;
+    int i = ss_id;
     int cy = 0, cx = 1;
     int ccx = cx, ccy = cy;
-
+    
     char c = buffer_getch(b, i);
     while (c != '\0') {
 	switch(c) {
@@ -118,6 +126,26 @@ void ui_refresh()
 	c = buffer_getch(b, i);
     }
 
+    if (ccy == 0) {
+	ss_id = curid;
+	while (1){
+	    if (ss_id == 0) break;
+	    if (buffer_getch(b, ss_id) == '\n') {
+		ss_id++;
+		break;
+	    }
+	    ss_id--;
+	}
+    } else if (ccy >= rows - 1) {
+	ss_id = curid;
+	while (1) {
+	    char c = buffer_getch(b, ss_id);
+	    if (c == '\0') break;
+	    if (c == '\n') break;
+	    ss_id++;
+	}
+    }
+    
     /* status bar */
     clrtobot();
     attron(A_STANDOUT);
