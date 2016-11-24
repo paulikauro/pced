@@ -10,4 +10,4 @@ all: $(OBJ)
 	gcc $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ) pe
+	rm -f $(OBJ) pced
