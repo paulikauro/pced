@@ -3,6 +3,10 @@
 #include "ui.h"
 #include "buffer.h"
 
+/* private function definitions */
+int ui_input();
+void ui_refresh();
+
 buffer *b;
 int rows, cols;
 int curid;
@@ -22,6 +26,20 @@ void ui_init(buffer *buf)
 
 int ui_update()
 {
+    int s = ui_input();
+    ui_refresh();
+    return s;
+}
+
+void ui_free()
+{
+    endwin();
+}
+
+/* private function implementations */
+
+int ui_input()
+{
     int s = 1;
     /* handle input */
     int ch = getch();
@@ -32,12 +50,14 @@ int ui_update()
 	break;
     case KEY_RIGHT:
 	curid++;
-	if (buffer_getch(b, curid) == '\0') curid--;
+	if (buffer_getch(b, curid - 1)  == '\0') curid--;
 	break;
     case KEY_LEFT:
+	if (curid == 0) break;
 	curid--;
 	break;
     case KEY_BACKSPACE:
+	if (curid == 0) break;
 	buffer_delete(b, curid, 1);
 	curid--;
 	break;
@@ -50,7 +70,11 @@ int ui_update()
 	curid++;
 	break;
     }
+    return s;
+}
 
+void ui_refresh()
+{
     /* update the screen */
     int i = 0;
     int cy = 0, cx = 0;
@@ -66,9 +90,11 @@ int ui_update()
 	    clrtoeol();
 	    cx = 0;
 	    cy++;
+	    break;
 	default:
 	    mvaddch(cy, cx, c);
 	    cx++;
+	    break;
 	}
 
 	if (cx > cols) {
@@ -76,7 +102,7 @@ int ui_update()
 	    cx = 0;
 	}
 
-	if (i == curid) {
+	if (i == curid - 1) {
 	    ccx = cx;
 	    ccy = cy;
 	}
@@ -84,14 +110,15 @@ int ui_update()
 	i++;
 	c = buffer_getch(b, i);
     }
-    move(ccy, ccx - 1);
 
-    refresh();
+    /* status bar */
+    clrtobot();
+    attron(A_STANDOUT);
+    mvprintw(rows - 1, 0, "gap_start: %d gap_end: %d x: %d y: %d curid: %d", b->gap_start, b->gap_end, ccx, ccy, curid);
+    clrtoeol();
+    attroff(A_STANDOUT);
+
+    move(ccy, ccx);
     
-    return s;
-}
-
-void ui_free()
-{
-    endwin();
+    refresh();
 }
