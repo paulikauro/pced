@@ -77,8 +77,9 @@ void ui_refresh()
 {
     /* update the screen */
     int i = 0;
-    int cy = 0, cx = 0;
-    int ccx = 0, ccy = 0;
+    int cy = 0, cx = 1;
+    int ccx = cx, ccy = cy;
+
     char c = buffer_getch(b, i);
     while (c != '\0') {
 	switch(c) {
@@ -88,7 +89,7 @@ void ui_refresh()
 	    break;
 	case '\n':
 	    clrtoeol();
-	    cx = 0;
+	    cx = 1;
 	    cy++;
 	    break;
 	default:
@@ -99,7 +100,8 @@ void ui_refresh()
 
 	if (cx > cols) {
 	    cy++;
-	    cx = 0;
+	    cx = 1;
+	    mvaddch(cy, 0, '\\');
 	}
 
 	if (i == curid - 1) {
