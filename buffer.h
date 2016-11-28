@@ -4,10 +4,10 @@
 
 typedef struct buffer
 {
-    char *ptr;
-    int size;
-    int gap_start;
-    int gap_end;
+	char *ptr;
+	int size;
+	int gap_start;
+	int gap_end;
 } buffer;
 
 buffer* buffer_alloc();
