@@ -132,25 +132,8 @@ void ui_refresh()
 		c = buffer_getch(b, i);
 	}
 
-	if (ccy == 0) {
-		ss_id = curid;
-		while (1){
-			if (ss_id == 0) break;
-			if (buffer_getch(b, ss_id) == '\n') {
-				ss_id++;
-				break;
-			}
-			ss_id--;
-		}
-	} else if (ccy >= rows - 1) {
-		ss_id = curid;
-		while (1) {
-			char c = buffer_getch(b, ss_id);
-			if (c == '\0') break;
-			if (c == '\n') break;
-			ss_id++;
-		}
-	}
+	if (curid < ss_id) ss_id = curid;
+	if (ccy == rows - 2) ss_id = curid;
 	
 	/* status bar */
 	clrtobot();
