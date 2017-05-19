@@ -22,12 +22,18 @@ int main(int argc, char *argv[])
 	buffer_loadfile(buf, filename);
 	ui_init(buf, filename);
 
+	fprintf(stderr, "Entering main event loop\n");
+
 	int state = 1;
 	while (state) {
 		state = ui_update();
 	}
 
+	fprintf(stderr, "Freeing resources\n");
+
 	ui_free();
 	buffer_free(buf);
+
+	fprintf(stderr, "Stopping\n\n");
 	return 0;
 }
