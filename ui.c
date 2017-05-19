@@ -70,9 +70,10 @@ int ui_input()
 		if (buffer_getch(b, curid) != '\0') curid++;
 		break;
 	case KEY_UP:
-		while (curid > 1 && buffer_getch(b, curid) != '\n') {
+		while (curid > 0 && buffer_getch(b, curid - 1) != '\n') {
 			curid--;
 		}
+		if (curid > 0) curid--;
 		break;
 	case KEY_BACKSPACE:
 		if (curid == 0) break;
