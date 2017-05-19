@@ -1,5 +1,5 @@
 # pced: Placeholder C EDitor
-Currently a very small terminal text editor made in C using ncurses. It works decently, there are no serious bugs anymore but the interface is still a bit weird.
+Currently a very small terminal text editor written in C, using ncurses as the terminal driver. It works decently, there are no serious bugs anymore but the interface is still a bit weird.
 
 # Usage and keybindings
 * open a file: pced \<filename\>
