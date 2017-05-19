@@ -132,7 +132,12 @@ void ui_refresh()
 		c = buffer_getch(b, i);
 	}
 
-	if (curid < ss_id) ss_id = curid;
+	if (curid < ss_id) {
+		ss_id = curid;
+		while (buffer_getch(b, ss_id - 1) != '\n' && ss_id > 0) {
+			ss_id--;
+		}
+	}
 	if (ccy == rows - 2) ss_id = curid;
 	
 	/* status bar */
