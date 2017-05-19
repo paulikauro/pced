@@ -26,7 +26,7 @@ void ui_init(buffer *buf, char * filename)
 	noecho();
 
 	getmaxyx(stdscr, rows, cols);
-		ui_refresh();
+	ui_refresh();
 }
 
 int ui_update()
@@ -57,18 +57,23 @@ int ui_input()
 		buffer_savefile(b, fn);
 		break;
 	case KEY_RIGHT:
-		curid++;
-		if (buffer_getch(b, curid - 1)	== '\0') curid--;
+		if (buffer_getch(b, curid) != '\0') curid++;
 		break;
 	case KEY_LEFT:
 		if (curid == 0) break;
 		curid--;
 		break;
 	case KEY_DOWN:
-		if (buffer_getch(b, curid + cols - 1) != '\0') curid += cols;
+		while (buffer_getch(b, curid) != '\n' && buffer_getch(b, curid) != '\0') {
+			curid++;
+		}
+		if (buffer_getch(b, curid) != '\0') curid++;
 		break;
 	case KEY_UP:
-		if (curid - cols >= 0) curid -= cols;
+		while (curid > 0 && buffer_getch(b, curid) != '\n') {
+			curid--;
+		}
+		if (curid > 0) curid--;
 		break;
 	case KEY_BACKSPACE:
 		if (curid == 0) break;
