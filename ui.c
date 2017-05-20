@@ -80,6 +80,11 @@ int ui_input()
 		buffer_delete(b, curid, 1);
 		curid--;
 		break;
+	case KEY_DC:
+		if (buffer_getch(b, curid + 1) != '\0') {
+			buffer_delete(b, curid + 1, 1);
+		}
+		break;
 	case KEY_ENTER:
 		buffer_insertch(b, '\n', curid);
 		curid++;
