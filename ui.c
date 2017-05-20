@@ -38,8 +38,6 @@ int ui_update()
 
 void ui_free()
 {
-	clear();
-	refresh();
 	endwin();
 }
 
