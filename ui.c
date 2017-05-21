@@ -1,4 +1,5 @@
 #include <ncurses.h>
+#include <math.h>
 
 #include "ui.h"
 #include "buffer.h"
@@ -12,6 +13,7 @@ int rows, cols;
 int curid;
 char * fn;
 int ss_id;
+int ss_line;
 
 void ui_init(buffer *buf, char * filename)
 {
@@ -19,6 +21,7 @@ void ui_init(buffer *buf, char * filename)
 	curid = 0;
 	fn = filename;
 	ss_id = 0;
+	ss_line = 1;
 	
 	initscr();
 	raw();
@@ -101,11 +104,14 @@ void ui_refresh()
 {
 	/* update the screen */
 	int i = ss_id;
-	int cy = 0, cx = 1;
+	int line = ss_line;
+	int padding = floor(log10(line)) + 3;
+	fprintf(stderr, "\neckdee %d\n", padding);
+	int cy = 0, cx = padding;
 	int ccx = cx, ccy = cy;
 	
 	char c = buffer_getch(b, i);
-	while (c != '\0') {
+	while (c != '\0' && cy < rows) {
 		switch(c) {
 		case '\t':
 			mvaddstr(cy, cx, "	  ");
@@ -114,8 +120,17 @@ void ui_refresh()
 		case '\n':
 			move(cy, cx);
 			clrtoeol();
-			cx = 1;
+			cx = padding;
 			cy++;
+			line++;
+			move(cy, 0);
+			clrtoeol();
+			{
+				char ln[padding];
+				ln[padding-1] = '\0';
+				sprintf(ln, "%0*d", padding - 1, line);
+				mvaddnstr(cy, 0, ln, 3); 
+			}
 			break;
 		default:
 			mvaddch(cy, cx, c);
@@ -125,8 +140,7 @@ void ui_refresh()
 
 		if (cx == cols) {
 			cy++;
-			cx = 1;
-			mvaddch(cy, 0, '\\');
+			cx = padding;
 		}
 
 		if (i == curid - 1) {
@@ -143,6 +157,7 @@ void ui_refresh()
 		while (buffer_getch(b, ss_id - 1) != '\n' && ss_id > 0) {
 			ss_id--;
 		}
+		ss_line -= 1;
 	}
 	if (ccy == rows - 2) ss_id = curid;
 	

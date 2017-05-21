@@ -1,5 +1,5 @@
 CFLAGS=-Wall -Wextra -Werror -g
-LDFLAGS=-lncurses
+LDFLAGS=-lncurses -lm
 SRC=$(wildcard *.c)
 OBJ=$(SRC:.c=.o)
 
